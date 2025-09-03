@@ -33,10 +33,10 @@ Construir uma aplicação web que permita adicionar disciplinas, definir metas d
 ---
 
 ### 3. Progresso Individual
-- [ ] Adicionar botão ou input para registrar horas estudadas em cada disciplina.
-- [ ] Atualizar `horasEstudadas` no objeto correspondente.
+- [x] Adicionar botão ou input para registrar horas estudadas em cada disciplina.
+- [x] Atualizar `horasEstudadas` no objeto correspondente.
 - [ ] Calcular progresso em % → `(horasEstudadas / meta) * 100`.
-- [ ] Mostrar barra ou texto de progresso.
+- [ ] Mostrar barra ou texto de progresso. 
 
 ---
 

@@ -13,8 +13,8 @@ adicionaBtn.addEventListener('click', (e) =>{
     //cria um novo objeto a cada clique
     let plannerEstudo = {
         nome: nomeDisciplina.value,
-        meta:horasMeta.value + ' horas' ,
-        horasEstudadas: null
+        meta:parseInt(horasMeta.value),
+        horasEstudadas: 0
     }
 
     if(plannerEstudo.nome && plannerEstudo.meta){
@@ -34,10 +34,12 @@ function mostrarDisciplina (plannerEstudo) {
 
     const info = document.createElement('span')
     info.classList.add('info')
-    info.innerText = `Nome: ${plannerEstudo.nome} - Meta: ${plannerEstudo.meta}`
+
+    // função para atualizar a exibição
+    atualizarExibicao(info, plannerEstudo)
+    
+    
     listDisciplina.appendChild(info)
-
-
     lista.appendChild(listDisciplina)
 
     // limpa inputs
@@ -45,12 +47,26 @@ function mostrarDisciplina (plannerEstudo) {
     horasMeta.value = ''
 
 
-    criarBoatoExcluir(listDisciplina, plannerEstudo)
+    criarBotaoExcluir(listDisciplina, plannerEstudo)
     inputHorasEstudados(listDisciplina, plannerEstudo)
 }
 
 
-function criarBoatoExcluir (listDisciplina, plannerEstudo) {
+
+function atualizarExibicao (infoElement, plannerEstudo){
+    const progresso = calcularProgreso(plannerEstudo)
+    let texto = `Nome: ${plannerEstudo.nome} - Meta: ${plannerEstudo.meta} horas`
+
+    if(plannerEstudo.horasEstudadas > 0){
+        texto += ` - Horas estudadas: ${plannerEstudo.horasEstudadas} horas - Progresso: ${progresso.toFixed(1)}%`
+    }
+
+    infoElement.innerText = texto
+}
+
+
+
+function criarBotaoExcluir (listDisciplina, plannerEstudo) {
     const botaoDelete = document.createElement('button')
     botaoDelete.textContent = 'Excluir'
     listDisciplina.appendChild(botaoDelete)
@@ -65,8 +81,6 @@ function criarBoatoExcluir (listDisciplina, plannerEstudo) {
         if(index > -1) estudosInfo.splice(index, 1)
         console.log(estudosInfo)
     })
-    
-    listDisciplina.appendChild(botaoDelete)
 }
 
 
@@ -79,31 +93,55 @@ function inputHorasEstudados (listDisciplina, plannerEstudo){
     horaEstudado.min = '1'
     horaEstudado.max = '24'
     horaEstudado.step = '0.5'
-    horaEstudado.required
+    horaEstudado.required = true
 
     listDisciplina.appendChild(horaEstudado)
 
-    horaEstudado.value = ''
 
     const botaoAtualizarObjeto = document.createElement('button')
     botaoAtualizarObjeto.textContent = 'Atualizar'
-
     listDisciplina.appendChild(botaoAtualizarObjeto)
 
+
     botaoAtualizarObjeto.addEventListener( 'click', () =>{
-        if (!horaEstudado.value){
-            alert('Insira as horas estudadas!')
+        if (!horaEstudado.value || horaEstudado.value <=0){
+            alert('Insira um valor válido para as horas estudadas!')
             return
         }
 
 
         // Atualiza o objeto
-        plannerEstudo.horasEstudadas = horaEstudado.value
+        plannerEstudo.horasEstudadas = parseFloat(horaEstudado.value)
+        console.log('Objeto atualizado:', plannerEstudo)
+
 
         // Atualiza o Dom sem apagar os elementos
-        listDisciplina.querySelector('.info').innerText = `Nome: ${plannerEstudo.nome} - Meta: ${plannerEstudo.meta} - Horas estudadas: ${plannerEstudo.horasEstudadas}`
+        const infoElement = listDisciplina.querySelector('.info')
+        atualizarExibicao(infoElement, plannerEstudo)
 
         
+        // limpa o input após atualizar
+        horaEstudado.value = ''
     })
+
 }
+
+
+function calcularProgreso (plannerEstudo) {
+    // verifica se tem horas estudados
+    if (plannerEstudo.horasEstudadas === 0 || !plannerEstudo.horasEstudadas){
+        console.log('Ainda não há estudadas')
+        return 0
+    }
+
+    const tempoGastoEstudando = plannerEstudo.horasEstudadas
+    const metaTempoEstudo = plannerEstudo.meta 
+
+    const progresso = (tempoGastoEstudando / metaTempoEstudo) * 100
+
+    console.log(`Progresso de ${plannerEstudo.nome}: ${progresso.toFixed(1)}%`)
+    return progresso
+
+}
+
 
