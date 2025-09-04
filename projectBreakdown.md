@@ -35,14 +35,14 @@ Construir uma aplicação web que permita adicionar disciplinas, definir metas d
 ### 3. Progresso Individual
 - [x] Adicionar botão ou input para registrar horas estudadas em cada disciplina.
 - [x] Atualizar `horasEstudadas` no objeto correspondente.
-- [ ] Calcular progresso em % → `(horasEstudadas / meta) * 100`.
-- [ ] Mostrar barra ou texto de progresso. 
+- [x] Calcular progresso em % → `(horasEstudadas / meta) * 100`.
+- [x] Mostrar barra ou texto de progresso. 
 
 ---
 
 ### 4. Persistência de Dados
-- [ ] Usar `localStorage` para salvar o array de disciplinas.
-- [ ] Carregar dados ao iniciar a aplicação.
+- [x] Usar `localStorage` para salvar o array de disciplinas.
+- [x] Carregar dados ao iniciar a aplicação.
 - [ ] Atualizar sempre que algo for adicionado/removido/editado.
 
 ---
@@ -83,7 +83,7 @@ Construir uma aplicação web que permita adicionar disciplinas, definir metas d
 - Loops (`for`, `forEach`, `map`, `filter`, `reduce`, `sort`).
 - DOM (selecionar, criar e remover elementos).
 - EventListeners.
-- localStorage.
+-  .
 
 ---
 
