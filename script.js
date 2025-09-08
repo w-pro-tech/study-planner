@@ -5,12 +5,9 @@ const horasMeta = document.getElementById('horas')
 const adicionarBotao = document.getElementById('adicionar-btn')
 const lista = document.getElementById('listaDisciplina')
 
-
-     
 adicionarBotao.addEventListener('click', (e) => {
     e.preventDefault()
 
-    //cria um novo objeto a cada clique
     let planejadorEstudo = {
         nome: nomeDisciplina.value,
         meta: parseInt(horasMeta.value),
@@ -18,187 +15,200 @@ adicionarBotao.addEventListener('click', (e) => {
     }
 
     if(planejadorEstudo.nome && planejadorEstudo.meta){
-         // guarda no array
         informacoesEstudos.push(planejadorEstudo)
-
-        // passa o objeto pra função que mostra
         mostrarDisciplina(planejadorEstudo)
+        limparInputs()
     } else {
         window.alert('Preencha os campos!!!')
     }
 })
 
-
 function mostrarDisciplina(planejadorEstudo) {
-    criarElementos()
-
-
-
-    
-    // chama função salvarDisciplina sempre que mostrar uma nova disciplina
+    const cardDisciplina = criarElementos(planejadorEstudo)
+    lista.appendChild(cardDisciplina)
     salvarDisciplina() 
 }
 
-
 function criarElementos(planejadorEstudo) {
-    const listaDisciplina = document.createElement('li')
-    const informacao = document.createElement('span')
-    informacao.classList.add('informacao')
-
-    listaDisciplina.appendChild(informacao)
-    atualizarExibicao(informacao, planejadorEstudo)
+    // Criar o card principal
+    const cardDisciplina = document.createElement('li')
+    cardDisciplina.className = 'disciplina-card'
     
+    // Header do card com o nome da disciplina
+    const cardHeader = document.createElement('div')
+    cardHeader.className = 'card-header'
     
-    return listaDisciplina
+    const nomeDisciplinaEl = document.createElement('h3')
+    nomeDisciplinaEl.className = 'disciplina-nome'
+    nomeDisciplinaEl.textContent = planejadorEstudo.nome
+    
+    cardHeader.appendChild(nomeDisciplinaEl)
+    
+    // Informações da disciplina
+    const cardInfo = document.createElement('div')
+    cardInfo.className = 'card-info'
+    
+    const metaHoras = document.createElement('div')
+    metaHoras.className = 'info-item'
+    metaHoras.innerHTML = `
+        <span class="info-label">Meta de hora de estudo:</span>
+        <span class="info-value">${planejadorEstudo.meta} horas</span>
+    `
+    
+    const horasEstudadasEl = document.createElement('div')
+    horasEstudadasEl.className = 'info-item'
+    horasEstudadasEl.innerHTML = `
+        <span class="info-label">Horas estudando:</span>
+        <span class="info-value horas-estudadas">${planejadorEstudo.horasEstudadas} horas</span>
+    `
+    
+    cardInfo.appendChild(metaHoras)
+    cardInfo.appendChild(horasEstudadasEl)
+    
+    // Container de progresso
+    const progressoContainer = document.createElement('div')
+    progressoContainer.className = 'progresso-container'
+    
+    const progressoLabel = document.createElement('div')
+    progressoLabel.className = 'progresso-label'
+    
+    const progresso = calcularProgresso(planejadorEstudo)
+    progressoLabel.innerHTML = `
+        <span>Progresso:</span>
+        <span class="progresso-porcentagem">${progresso.toFixed(1)}%</span>
+    `
+    
+    const progressoBar = document.createElement('div')
+    progressoBar.className = 'progresso-bar'
+    
+    const progressoFill = document.createElement('div')
+    progressoFill.className = 'progresso-fill'
+    progressoFill.style.width = `${Math.min(progresso, 100)}%`
+    
+    progressoBar.appendChild(progressoFill)
+    progressoContainer.appendChild(progressoLabel)
+    progressoContainer.appendChild(progressoBar)
+    
+    // Input para adicionar horas
+    const inputHoras = document.createElement('input')
+    inputHoras.type = 'number'
+    inputHoras.placeholder = 'Adicionar horas estudadas...'
+    inputHoras.min = '0.5'
+    inputHoras.max = '24'
+    inputHoras.step = '0.5'
+    inputHoras.className = 'input-horas'
+    
+    // Botões de ação
+    const cardActions = document.createElement('div')
+    cardActions.className = 'card-actions'
+    
+    const botaoAtualizar = document.createElement('button')
+    botaoAtualizar.textContent = 'Atualizar'
+    botaoAtualizar.className = 'btn-atualizar'
+    
+    const botaoExcluir = document.createElement('button')
+    botaoExcluir.textContent = 'Excluir'
+    botaoExcluir.className = 'btn-excluir'
+    
+    cardActions.appendChild(botaoAtualizar)
+    cardActions.appendChild(botaoExcluir)
+    
+    // Event listeners
+    botaoAtualizar.addEventListener('click', () => {
+        const horasAdicionais = parseFloat(inputHoras.value)
+        
+        if (!horasAdicionais || horasAdicionais <= 0) {
+            alert('Insira um valor válido para as horas estudadas!')
+            return
+        }
+        
+        // Atualiza o objeto
+        planejadorEstudo.horasEstudadas += horasAdicionais
+        
+        // Atualiza a exibição
+        atualizarCardExibicao(cardDisciplina, planejadorEstudo)
+        
+        // Limpa o input
+        inputHoras.value = ''
+        
+        salvarDisciplina()
+    })
+    
+    botaoExcluir.addEventListener('click', () => {
+        // Remove do DOM
+        cardDisciplina.remove()
+        
+        // Remove do array
+        const indice = informacoesEstudos.indexOf(planejadorEstudo)
+        if(indice > -1) informacoesEstudos.splice(indice, 1)
+        
+        salvarDisciplina()
+    })
+    
+    // Montagem final do card
+    cardDisciplina.appendChild(cardHeader)
+    cardDisciplina.appendChild(cardInfo)
+    cardDisciplina.appendChild(progressoContainer)
+    cardDisciplina.appendChild(inputHoras)
+    cardDisciplina.appendChild(cardActions)
+    
+    return cardDisciplina
 }
 
+function atualizarCardExibicao(cardElement, planejadorEstudo) {
+    // Atualiza horas estudadas
+    const horasEstudadasEl = cardElement.querySelector('.horas-estudadas')
+    horasEstudadasEl.textContent = `${planejadorEstudo.horasEstudadas} horas`
+    
+    // Atualiza progresso
+    const progresso = calcularProgresso(planejadorEstudo)
+    const progressoPorcentagem = cardElement.querySelector('.progresso-porcentagem')
+    const progressoFill = cardElement.querySelector('.progresso-fill')
+    
+    progressoPorcentagem.textContent = `${progresso.toFixed(1)}%`
+    progressoFill.style.width = `${Math.min(progresso, 100)}%`
+}
 
 function limparInputs() {
     nomeDisciplina.value = ''
     horasMeta.value = ''
 }
 
-
-function adicionarNaTela(listaDisciplina, planejadorEstudo) {
-    lista.appendChild(listaDisciplina)
-
-    criarBotaoExcluir(listaDisciplina, planejadorEstudo)
-    
-    entradaHorasEstudadas(listaDisciplina, planejadorEstudo)
-
-}
-
-
-
-function atualizarExibicao(elementoInformacao, planejadorEstudo){
-    const progresso = calcularProgresso(planejadorEstudo)
-    let texto = `Nome: ${planejadorEstudo.nome} - Meta: ${planejadorEstudo.meta} horas`
-
-    if(planejadorEstudo.horasEstudadas > 0){
-        texto += ` - Horas estudadas: ${planejadorEstudo.horasEstudadas} horas - Progresso: ${progresso.toFixed(1)}%`
-    }
-
-    elementoInformacao.innerText = texto
-}
-
-
-
-function criarBotaoExcluir(listaDisciplina, planejadorEstudo) {
-    const botaoExcluir = document.createElement('button')
-    botaoExcluir.textContent = 'Excluir'
-    listaDisciplina.appendChild(botaoExcluir)
-
-
-    botaoExcluir.addEventListener('click', () => {
-        // remove do DOM
-        listaDisciplina.remove()
-
-        //remove do array
-        const indice = informacoesEstudos.indexOf(planejadorEstudo)
-        if(indice > -1) informacoesEstudos.splice(indice, 1)
-    })
-}
-
-
-function entradaHorasEstudadas(listaDisciplina, planejadorEstudo){
-    const horaEstudada = document.createElement('input')
-
-    horaEstudada.type = 'number'
-    horaEstudada.placeholder = 'Horas estudadas...'
-    horaEstudada.id = 'horasEstudadas'
-    horaEstudada.min = '1'
-    horaEstudada.max = '24'
-    horaEstudada.step = '0.5'
-    horaEstudada.required = true
-
-    listaDisciplina.appendChild(horaEstudada)
-
-
-    const botaoAtualizarObjeto = document.createElement('button')
-    botaoAtualizarObjeto.textContent = 'Atualizar'
-    listaDisciplina.appendChild(botaoAtualizarObjeto)
-
-
-    botaoAtualizarObjeto.addEventListener('click', () => {
-        if (!horaEstudada.value || horaEstudada.value <= 0){
-            alert('Insira um valor válido para as horas estudadas!')
-            return
-        }
-
-
-        // Atualiza o objeto
-        planejadorEstudo.horasEstudadas = parseFloat(horaEstudada.value)
-        console.log('Objeto atualizado:', planejadorEstudo)
-
-        
-        // Atualiza o Dom sem apagar os elementos
-        const elementoInformacao = listaDisciplina.querySelector('.informacao')
-        atualizarExibicao(elementoInformacao, planejadorEstudo)
-        
-        
-        // limpa o input após atualizar
-        horaEstudada.value = ''
-        
-        // Chamar função salvar disciplinas
-        salvarDisciplina()
-    })
-
-}
-
-
 function calcularProgresso(planejadorEstudo) {
-    // verifica se tem horas estudadas
     if (planejadorEstudo.horasEstudadas === 0 || !planejadorEstudo.horasEstudadas){
-        console.log('Ainda não há horas estudadas')
         return 0
     }
 
     const tempoGastoEstudando = planejadorEstudo.horasEstudadas
     const metaTempoEstudo = planejadorEstudo.meta 
-
     const progresso = (tempoGastoEstudando / metaTempoEstudo) * 100
 
     return progresso
-
 }
 
-
-// Função para salvar disciplinas
+// Função para salvar disciplinas (usando variável em memória ao invés de localStorage)
 function salvarDisciplina() {
-    localStorage.setItem('informacoesEstudos', JSON.stringify(informacoesEstudos))
+    // Para demonstração, apenas mantém os dados em memória
+    console.log('Dados salvos:', informacoesEstudos)
 }
 
-
-// Função para carregar do localStorage
 function carregarDisciplinas() {
-    const disciplinasSalvas = localStorage.getItem('informacoesEstudos')
-
-    if(disciplinasSalvas) {
-        informacoesEstudos = JSON.parse(disciplinasSalvas)
-        console.log('Disciplinas carregadas')
-    } else {
-        informacoesEstudos = [] // array vazio se não houver dados
-        console.log('Nenhuma disciplina salva encontrada')
-    }
+    // Como não podemos usar localStorage, inicia com array vazio
+    informacoesEstudos = []
+    console.log('Disciplinas inicializadas')
 }
 
 function carregarExibirDisciplinas() {
-    carregarDisciplinas() // chama função carregar disciplinas do local storage
-
-
-    // limpa a lista antes de mostrar
+    carregarDisciplinas()
+    
+    // Limpa a lista antes de mostrar
     lista.innerHTML = ''
-
-    // exibe cada disciplina carregada
+    
+    // Exibe cada disciplina carregada
     informacoesEstudos.forEach(planejadorEstudo => {
         mostrarDisciplina(planejadorEstudo)
     })
 }
-
-
-
-
-
 
 document.addEventListener('DOMContentLoaded', function () {
     console.log('Página carregada, carregando disciplinas...')
