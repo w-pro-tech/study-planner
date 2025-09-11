@@ -8,7 +8,9 @@ export function mostrarDisciplina(planejadorEstudo) {
   salvarDisciplina()
 }
 
+// função para criar os elementos
 function criarElementos(planejadorEstudo) {
+  // criação do elemento
   const cardDisciplina = document.createElement('li')
   cardDisciplina.className = 'disciplina-card'
 
@@ -65,7 +67,7 @@ function criarElementos(planejadorEstudo) {
 
   const inputHoras = document.createElement('input')
   inputHoras.type = 'number'
-  inputHoras.placeholder = 'Adicionar horas estudadas...'
+  inputHoras.placeholder = 'Adicionar horas estudadas'
   inputHoras.min = '0.5'
   inputHoras.max = '24'
   inputHoras.step = '0.5'

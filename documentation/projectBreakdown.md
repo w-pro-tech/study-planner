@@ -95,3 +95,50 @@ Construir uma aplicação web que permita adicionar disciplinas, definir metas d
 
 
 https://github.com/w-pro-tech/study-planner
+
+
+
+## Melhorias do design
+**Input de adicionar Horas estudadas**
+1. Colocar ***inputHoras***, ***botaoAtualizar*** e ***botaoExcluir*** na mesma linha em telas grandes e deixar separados em telas menores;
+
+
+
+## TAREFA 1: Configuração Inicial
+    - Aguardar carregamento da página (DOMContentLoaded)
+    - Obter referências dos elementos: form, botões, inputs, mensagens
+    - Criar variáveis para armazenar os elementos principais
+
+##  TAREFA 2: Função de Mostrar/Ocultar Senha
+    - Adicionar event listener no botão "showPassword"
+    - Alternar tipo do input entre "password" e "text"
+    - Alterar texto do botão entre "Mostrar" e "Ocultar"
+
+##  TAREFA 3: Sistema de Mensagens
+    - Criar função showMessage(elemento, mensagem, éErro)
+    - Criar função hideMessages() para limpar todas as mensagens
+    - Implementar timeout para mensagens de sucesso (3 segundos)
+
+##  TAREFA 4: Validações
+    - Criar função isValidEmail() usando regex
+    - Validar campos obrigatórios (não vazios)
+    - Validar formato de email
+    - Validar senha mínima (6 caracteres)
+
+##  TAREFA 5: Submissão do Formulário
+    - Interceptar evento submit (preventDefault)
+    - Coletar dados do FormData
+    - Executar todas as validações
+    - Mostrar estado de loading (botão disabled, texto "Entrando...")
+    - Simular processo de login com setTimeout
+    - Restaurar estado normal do botão
+
+##  TAREFA 6: Navegação e Links
+    - Event listeners para links de registro e recuperação de senha
+    - Event listeners para botões de login social
+    - Implementar redirecionamentos (ou simulações)
+
+##    TAREFA 7: UX Melhorias
+    - Limpar mensagens automaticamente quando usuário digitar
+    - Adicionar event listeners nos inputs para esconder mensagens
+    -->

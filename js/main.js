@@ -26,5 +26,5 @@ adicionarBotao.addEventListener('click', (e) => {
 
 document.addEventListener('DOMContentLoaded', () => {
   carregarDisciplinas()
-  informacoesEstudos.forEach(d => mostrarDisciplina(d))
+  informacoesEstudos.forEach(disciplina => mostrarDisciplina(disciplina))
 })

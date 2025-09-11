@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study planner</title>
+    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="shortcut icon" href="imagens/studying.png" type="image/x-icon">
+</head>
+<body>
+      <div class="container">
+        <header>
+            <h1>📚 Planeador de Estudos</h1>
+            <p>Organize suas disciplinas e acompanhe seu progresso</p>
+        </header>
+
+        <main>
+            <section class="form-section">
+                <form>
+                    <fieldset class="form-group">
+                        <legend class="visually-hidden">Adicionar Nova Disciplina</legend>
+                        
+                        <div class="input-container">
+                            <label for="disciplinaNome">Nome da Disciplina</label>
+                            <input 
+                                type="text" 
+                                id="disciplinaNome" 
+                                name="disciplinaNome"
+                                placeholder="Ex: Design Multimedia, Programação..."
+                                required
+                                aria-describedby="disciplina-help">
+                            <small id="disciplina-help" class="visually-hidden">Digite o nome da disciplina que você deseja estudar</small>
+                        </div>
+                        
+                        <div class="input-container">
+                            <label for="horas">Meta de Horas</label>
+                            <input 
+                                type="number" 
+                                id="horas" 
+                                name="horas"
+                                placeholder="Ex: 20" 
+                                min="1" 
+                                max="1000"
+                                required
+                                aria-describedby="horas-help">
+                            <small id="horas-help" class="visually-hidden">Defina quantas horas pretende estudar esta disciplina</small>
+                        </div>
+                        
+                        <button type="submit" id="adicionar-btn" aria-describedby="adicionar-help">
+                            ➕ Adicionar Disciplina
+                        </button>
+                        <small id="adicionar-help" class="visually-hidden">Clique para adicionar a disciplina à sua lista</small>
+                    </fieldset>
+                </form>
+            </section>
+
+            <section class="lista-section" aria-labelledby="disciplinas-title">
+                <h2 id="disciplinas-title" class="section-title">🎯 Minhas Disciplinas</h2>
+                <ul id="listaDisciplina" role="list" aria-live="polite" aria-label="Lista de disciplinas em estudo">
+                    <!-- As disciplinas aparecerão aqui dinamicamente -->
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="./js/main.js"></script>
+    <script type="module" src="./js/data.js"></script>
+    <script type="module" src="./js/utils.js"></script>
+    <script type="module" src="./js/dom.js"></script>
+</body>
+</html>
