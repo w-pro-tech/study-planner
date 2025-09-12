@@ -1,3 +1,27 @@
+// LOGIN 
+const botaoLogin = document.getElementById('botaoLogin')
+
+botaoLogin.addEventListener('click', () => {
+    const nome = document.getElementById('nomeUsuario')
+    const email = document.getElementById('usuarioEmail')
+    const senha = document.getElementById('usuarioPassword')
+
+    fetch("./login.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "nome=" + encodeURIComponent(nome) + "email=" + encodeURIComponent(email) + "&senha=" + encodeURIComponent(senha)
+    })
+    .then(resposta => resposta.json())
+    .then(data => {
+        document.getElementById("resposta").textContent = data.mensagem;
+    })
+    .catch(erro => console.error("Erro:", erro));
+}) 
+
+
+// REGISTO
 const botaoRegisto = document.getElementById('botaoRegisto')
 
 botaoRegisto.addEventListener('click', () => {
